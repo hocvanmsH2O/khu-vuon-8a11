@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Khu làm việc · Khu vườn</title>
-<link rel="icon" href="img/s1.webp">
-<link rel="stylesheet" href="css/vuon.css">
+<link rel="icon" href="s1.webp">
+<link rel="stylesheet" href="vuon.css">
 <style>
 .wrap{max-width:900px}
 .nav .snd{position:static;box-shadow:none;padding:7px 12px;font-size:13.5px}
@@ -89,12 +89,12 @@ th{font-size:12px;color:var(--soft);text-transform:uppercase;letter-spacing:.3px
 <div class="wrap">
 <div id="demo" class="demo" hidden></div>
 <header class="top">
- <div class="brand"><img src="img/s4.webp" alt=""><div><h1>Khu làm việc</h1><small>Tưới cây · duyệt điểm · kho quà</small></div></div>
+ <div class="brand"><img src="s4.webp" alt=""><div><h1>Khu làm việc</h1><small>Tưới cây · duyệt điểm · kho quà</small></div></div>
  <nav class="nav"><button class="snd" id="snd" aria-pressed="false">🔇 Bật âm thanh</button><a href="index.html">← Về khu vườn</a></nav>
 </header>
 
 <section id="loginBox" class="card login">
- <img src="img/s2.webp" alt="">
+ <img src="s2.webp" alt="">
  <h2>Đăng nhập bằng mã</h2>
  <p>Cán sự, thủ kho và cô dùng mã riêng của mình.</p>
  <div class="codebox"><input id="code" maxlength="40" placeholder="Mã của em" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="go">Vào</button></div>
@@ -110,11 +110,11 @@ th{font-size:12px;color:var(--soft);text-transform:uppercase;letter-spacing:.3px
 </div>
 
 <script src="config.js"></script>
-<script src="js/seed.js"></script>
-<script src="js/core.js"></script>
-<script src="js/memdb.js"></script>
-<script src="js/api.js"></script>
-<script src="js/sound.js"></script>
+<script src="seed.js"></script>
+<script src="core.js"></script>
+<script src="memdb.js"></script>
+<script src="api.js"></script>
+<script src="sound.js"></script>
 <script>
 const $=id=>document.getElementById(id);
 const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));

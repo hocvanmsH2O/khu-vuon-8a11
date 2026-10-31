@@ -1,8 +1,8 @@
-@font-face{font-family:"Vuon";src:url(../fonts/inter-Regular.woff) format("woff");font-weight:400;font-display:swap}
-@font-face{font-family:"Vuon";src:url(../fonts/inter-SemiBold.woff) format("woff");font-weight:500 600;font-display:swap}
-@font-face{font-family:"Vuon";src:url(../fonts/inter-Bold.woff) format("woff");font-weight:700;font-display:swap}
-@font-face{font-family:"Vuon";src:url(../fonts/inter-ExtraBold.woff) format("woff");font-weight:800 900;font-display:swap}
-@font-face{font-family:"VuonSerif";src:url(../fonts/lora-italic.woff) format("woff");font-style:italic;font-weight:400;font-display:swap}
+@font-face{font-family:"Vuon";src:url(inter-Regular.woff) format("woff");font-weight:400;font-display:swap}
+@font-face{font-family:"Vuon";src:url(inter-SemiBold.woff) format("woff");font-weight:500 600;font-display:swap}
+@font-face{font-family:"Vuon";src:url(inter-Bold.woff) format("woff");font-weight:700;font-display:swap}
+@font-face{font-family:"Vuon";src:url(inter-ExtraBold.woff) format("woff");font-weight:800 900;font-display:swap}
+@font-face{font-family:"VuonSerif";src:url(lora-italic.woff) format("woff");font-style:italic;font-weight:400;font-display:swap}
 :root{--ink:#3B2A1A;--soft:#6B5640;--leaf:#3F7A2A;--cream:#FFF8EC;--card:rgba(255,251,242,.92);--line:rgba(110,80,40,.18);
 --t1:#3E86C9;--t2:#D9534F;--t3:#5E9E5A;--t4:#E2A916}
 *{box-sizing:border-box}

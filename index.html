@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
 <title>Khu vườn 8A11</title>
-<link rel="icon" href="img/s1.webp">
-<link rel="stylesheet" href="css/vuon.css">
+<link rel="icon" href="s1.webp">
+<link rel="stylesheet" href="vuon.css">
 <style>
 .demo{background:#FFF4C9;border:1px dashed #C9A227;border-radius:14px;padding:10px 14px;font-size:13.5px;margin-bottom:12px;line-height:1.55}
 .demo b{font-weight:700}.demo code{background:#fff;border-radius:6px;padding:1px 6px;font-weight:700}
@@ -21,13 +21,13 @@
 <div id="demo" class="demo" hidden></div>
 
 <header class="top">
- <div class="brand"><img src="img/s1.webp" alt=""><div><h1 id="h1">Khu vườn</h1><small id="sub">Mỗi bạn một cây, cả lớp một khu vườn</small></div></div>
+ <div class="brand"><img src="s1.webp" alt=""><div><h1 id="h1">Khu vườn</h1><small id="sub">Mỗi bạn một cây, cả lớp một khu vườn</small></div></div>
  <nav class="nav"><a href="#vuon">Khu vườn</a><a href="#gio">Giỏ quả của em</a><a href="#kho">Kho quà</a></nav>
 </header>
 
 <section class="market">
  <div class="card fair">
-  <img class="bk" src="img/s8.webp" alt="">
+  <img class="bk" src="s8.webp" alt="">
   <div>
    <h2>Chợ phiên Quả ngọt</h2>
    <p id="fairTxt">Mang quả trong giỏ đến đổi quà nhé! <a class="link" href="#kho">Xem kho quà →</a></p>
@@ -44,7 +44,7 @@
 <section id="vuon" class="scene-box">
  <div class="viewport" id="vp">
   <div class="scene" id="scene">
-   <img class="bg" src="img/bg.jpg" alt="Khu vườn của lớp với 4 luống của 4 tổ">
+   <img class="bg" src="bg.jpg" alt="Khu vườn của lớp với 4 luống của 4 tổ">
    <div class="title"><span id="t2">🌱 Đang tải khu vườn…</span></div>
    <button class="stall" id="stall" aria-label="Mở kho quà và chợ phiên"><span>Chợ phiên</span></button>
   </div>
@@ -87,14 +87,14 @@
 </div>
 
 <script src="config.js"></script>
-<script src="js/seed.js"></script>
-<script src="js/core.js"></script>
-<script src="js/memdb.js"></script>
-<script src="js/api.js"></script>
-<script src="js/sound.js"></script>
+<script src="seed.js"></script>
+<script src="core.js"></script>
+<script src="memdb.js"></script>
+<script src="api.js"></script>
+<script src="sound.js"></script>
 <script>
 const W=1536,H=1024;
-const IMG=[0,1,2,3,4,5,6,7,8].map(i=>'img/s'+i+'.webp');
+const IMG=[0,1,2,3,4,5,6,7,8].map(i=>'s'+i+'.webp');
 const SW=[196,372,412,522,504,560,524];
 const BEDS={1:[[215,350],[712,350],[165,525],[712,525]],2:[[821,350],[1321,350],[821,525],[1364,525]],3:[[150,615],[712,615],[100,810],[712,810]],4:[[824,618],[1386,618],[824,810],[1436,810]]};
 const TEAM=[["Tổ 1","--t1"],["Tổ 2","--t2"],["Tổ 3","--t3"],["Tổ 4","--t4"]];

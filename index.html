@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Khu vườn 8A11</title>
+<link rel="icon" href="img/s1.webp">
+<link rel="stylesheet" href="css/vuon.css">
+<style>
+.demo{background:#FFF4C9;border:1px dashed #C9A227;border-radius:14px;padding:10px 14px;font-size:13.5px;margin-bottom:12px;line-height:1.55}
+.demo b{font-weight:700}.demo code{background:#fff;border-radius:6px;padding:1px 6px;font-weight:700}
+.demo button{border:0;background:#8A4B12;color:#fff;border-radius:8px;padding:4px 10px;font-weight:700;cursor:pointer;margin-left:6px}
+.loading{padding:60px 0;text-align:center;color:var(--soft)}
+.err{background:#FDECEA;color:#8A1C12;border-radius:12px;padding:12px 14px;margin:10px 0}
+.foot a{color:#8A4B12;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div id="demo" class="demo" hidden></div>
+
+<header class="top">
+ <div class="brand"><img src="img/s1.webp" alt=""><div><h1 id="h1">Khu vườn</h1><small id="sub">Mỗi bạn một cây, cả lớp một khu vườn</small></div></div>
+ <nav class="nav"><a href="#vuon">Khu vườn</a><a href="#gio">Giỏ quả của em</a><a href="#kho">Kho quà</a></nav>
+</header>
+
+<section class="market">
+ <div class="card fair">
+  <img class="bk" src="img/s8.webp" alt="">
+  <div>
+   <h2>Chợ phiên Quả ngọt</h2>
+   <p id="fairTxt">Mang quả trong giỏ đến đổi quà nhé! <a class="link" href="#kho">Xem kho quà →</a></p>
+   <div class="count" id="count"></div>
+  </div>
+ </div>
+ <div class="card quote">
+  <div class="qh"><span id="qn" style="margin:0;color:#3F7A2A;font-weight:700">🌱 Gieo một lời hay</span> <span id="qd"></span></div>
+  <blockquote id="qt">…</blockquote>
+  <div class="qa" id="qa"></div>
+ </div>
+</section>
+
+<section id="vuon" class="scene-box">
+ <div class="viewport" id="vp">
+  <div class="scene" id="scene">
+   <img class="bg" src="img/bg.jpg" alt="Khu vườn của lớp với 4 luống của 4 tổ">
+   <div class="title"><span id="t2">🌱 Đang tải khu vườn…</span></div>
+   <button class="stall" id="stall" aria-label="Mở kho quà và chợ phiên"><span>Chợ phiên</span></button>
+  </div>
+ </div>
+ <div class="zoombar" id="zoombar"></div>
+ <div class="tip" id="tip" hidden></div>
+</section>
+
+<section class="ladder" id="ladder" aria-label="Các mức của cây"></section>
+
+<section class="row">
+ <div class="card search">
+  <h3>🔎 Tìm cây của em</h3>
+  <input id="q" type="search" placeholder="Gõ tên gọi của em, ví dụ: Bảo Nhi" autocomplete="off">
+  <div class="res" id="res"></div>
+  <div class="hint">Chọn tên để cây của em sáng lên trong vườn.</div>
+ </div>
+ <div class="card honor">
+  <h3>🏅 Vinh danh</h3>
+  <div id="honor"></div>
+ </div>
+</section>
+
+<section id="gio" class="card basket">
+ <h3>🧺 Giỏ quả của em</h3>
+ <div class="hint" style="margin:0 0 8px">Điểm, lịch sử điểm và giỏ quả là của riêng em. Nhập mã cô đã phát để xem.</div>
+ <div class="codebox"><input id="code" maxlength="40" placeholder="Mã của em" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="go">Xem</button></div>
+ <div class="hint" id="codeErr" style="color:#B23A2E" hidden></div>
+ <div class="me" id="me"></div>
+</section>
+
+<section id="kho" class="card store">
+ <h3>🎁 Kho quà của lớp</h3>
+ <div class="goods" id="goods"></div>
+ <div class="note">Đổi quà tại <b>Chợ phiên Quả ngọt</b> mỗi tháng một lần. Thủ kho ghi lại, cô duyệt. Cảm ơn các gia đình đã góp quà cho kho!</div>
+</section>
+
+<button class="snd" id="snd" aria-pressed="false">🔇 Bật âm thanh</button>
+<div class="foot"><a href="lam-viec.html">Khu làm việc của cán sự và cô →</a></div>
+</div>
+
+<script src="config.js"></script>
+<script src="js/seed.js"></script>
+<script src="js/core.js"></script>
+<script src="js/memdb.js"></script>
+<script src="js/api.js"></script>
+<script src="js/sound.js"></script>
+<script>
+const W=1536,H=1024;
+const IMG=[0,1,2,3,4,5,6,7,8].map(i=>'img/s'+i+'.webp');
+const SW=[196,372,412,522,504,560,524];
+const BEDS={1:[[215,350],[712,350],[165,525],[712,525]],2:[[821,350],[1321,350],[821,525],[1364,525]],3:[[150,615],[712,615],[100,810],[712,810]],4:[[824,618],[1386,618],[824,810],[1436,810]]};
+const TEAM=[["Tổ 1","--t1"],["Tổ 2","--t2"],["Tổ 3","--t3"],["Tổ 4","--t4"]];
+const SIGNS=[[143,371],[1389,373],[69,646],[1467,644]];
+const CANS=[[122,425],[1420,425],[82,700],[1466,700]];
+const QNAMES=['🌱 Gieo một lời hay','☀️ Lời hay mỗi sáng','🌰 Hạt giống lời hay'];
+const $=id=>document.getElementById(id);
+const pct=(v,t)=>(v/t*100)+'%';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function quadPt(q,u,v){const[a,b,c,d]=q;const tx=a[0]+(b[0]-a[0])*u,ty=a[1]+(b[1]-a[1])*u,bx=c[0]+(d[0]-c[0])*u,by=c[1]+(d[1]-c[1])*u;return[tx+(bx-tx)*v,ty+(by-ty)*v]}
+let V=null,S=[],nodes=[],hl=null,zoomed=0;
+const scene=$('scene');
+
+/* ---------- chế độ thử ---------- */
+if(VuonAPI.demo){const c=VuonAPI.codes;$('demo').hidden=false;
+ $('demo').innerHTML=`<b>Đang chạy chế độ thử</b> (chưa nối Google Trang tính, điểm là dữ liệu mẫu, chỉ lưu trên máy này). Mã thử: học sinh <code>${c.hocSinh}</code> · cô <code>${c.co}</code> · tổ trưởng tổ 1 <code>${c.toTruong1}</code> · tổ phó tổ 1 <code>${c.toPho1}</code> · thủ kho <code>${c.thuKho}</code>. <a href="lam-viec.html">Mở khu làm việc →</a><button id="rs">Đặt lại dữ liệu thử</button>`;
+ $('rs').onclick=()=>{VuonAPI.resetDemo();location.reload()};}
+
+/* ---------- tải dữ liệu ---------- */
+/* Hiện ngay dữ liệu lần trước (nếu có) cho nhanh, rồi cập nhật bản mới từ máy chủ */
+const CK='vuon-cache-'+((window.VUON_CONFIG||{}).apiUrl||'demo').slice(-24);
+try{const c=localStorage.getItem(CK);if(c&&!VuonAPI.demo)render(JSON.parse(c))}catch(e){}
+VuonAPI.call({action:'vuon'}).then(d=>{render(d);try{localStorage.setItem(CK,JSON.stringify(d))}catch(e){}})
+ .catch(e=>{if(!V)$('t2').textContent='⚠️ '+e.message;});
+
+function render(d){
+ V=d;S=d.hocSinh;const N=d.tenMoc;
+ document.title='Khu vườn '+d.lop;$('h1').textContent='Khu vườn '+d.lop;
+ $('sub').textContent='Mùa tháng '+d.thang+' · Mỗi bạn một cây, cả lớp một khu vườn';
+ $('t2').textContent='🌱 Mùa tháng '+d.thang+' · còn '+d.conNgay+' ngày thu hoạch';
+ /* chợ phiên */
+ const cp=d.choPhien?new Date(d.choPhien+'T00:00:00'):null,today=new Date(d.homNay+'T00:00:00');
+ const dn=cp?Math.max(0,Math.round((cp-today)/864e5)):0;
+ $('fairTxt').innerHTML=(cp?`Mở ngày <b>${cp.getDate()}/${cp.getMonth()+1}</b> ${esc(d.gioChoPhien||'')}. `:'')+'Mang quả trong giỏ đến đổi quà nhé! <a class="link" href="#kho">Xem kho quà →</a>';
+ $('count').innerHTML=(cp?`<span>${dn}<i>ngày</i></span>`:'')+`<span>${d.kho.reduce((a,g)=>a+g.sl,0)}<i>món quà</i></span><span>${d.kho.filter(g=>g.sl>0).length}<i>loại</i></span>`;
+ /* lời hay */
+ const doy=Math.floor((today-new Date(today.getFullYear(),0,0))/864e5);
+ $('qn').textContent=QNAMES[doy%3];
+ const q=d.cauHay.length?d.cauHay[doy%d.cauHay.length]:['Mỗi ngày một việc tốt.',''];
+ $('qt').textContent=q[0];$('qa').textContent=q[1]?'— '+q[1]:'';
+ $('qd').textContent='· '+today.toLocaleDateString('vi-VN',{weekday:'long',day:'numeric',month:'numeric'});
+ drawGarden();drawLadder(N);drawHonor();drawStore();
+}
+
+function drawGarden(){
+ scene.querySelectorAll('.plant,.bee,.sign,.can,.ring').forEach(n=>n.remove());nodes=[];
+ S.forEach((s,i)=>{
+  const q=BEDS[s.to];if(!q||!s.o||s.o>10)return;
+  const r=Math.floor((s.o-1)/5),c=(s.o-1)%5;
+  const[x,y]=quadPt(q,(c+.5)/5,(r+.86)/2);
+  const cw=Math.hypot(...[0,1].map(k=>quadPt(q,(c+1)/5,(r+.5)/2)[k]-quadPt(q,c/5,(r+.5)/2)[k]));
+  const k=Math.min(6,s.muc),w=SW[k]/560*cw*1.02;
+  const b=document.createElement('button');b.className='plant';b.dataset.i=i;
+  b.style.left=pct(x,W);b.style.top=pct(y,H);b.style.width=pct(w,W);b.style.zIndex=10+r;
+  b.setAttribute('aria-label',s.ten+', '+V.tenMoc[k]);
+  b.innerHTML=`<img src="${IMG[k]}" alt="" style="--d:${4+((i*7)%30)/10}s;--dl:-${(i*13)%40/10}s">`+(s.qua>1?`<span class="q">×${s.qua}</span>`:'');
+  scene.appendChild(b);nodes[i]=b;
+  for(let j=0;j<Math.min(2,s.ong);j++){const be=document.createElement('div');be.className='bee';be.style.left=pct(x-cw*(.15-j*.3),W);be.style.top=pct(y-cw*(1.25-j*.2),H);be.style.width=pct(cw*.42,W);be.innerHTML=`<img src="${IMG[7]}" alt="" style="--d:${5+i%3+j}s">`;scene.appendChild(be)}
+ });
+ const ring=document.createElement('div');ring.className='ring';ring.id='ring';scene.appendChild(ring);
+ TEAM.forEach(([n,c],j)=>{
+  const s=document.createElement('div');s.className='sign';s.style.left=pct(SIGNS[j][0],W);s.style.top=pct(SIGNS[j][1],H);
+  s.innerHTML=`<i style="background:var(${c})"></i>${n}`;scene.appendChild(s);
+  const t=V.to[j],f=t.pt/100;
+  const cn=document.createElement('div');cn.className='can'+(f>=1?' full':'');cn.style.left=pct(CANS[j][0],W);cn.style.top=pct(CANS[j][1],H);
+  cn.innerHTML=`<div class="lbl">${f>=1?'💧 Đầy bình!':'💧 '+t.pt+'%'}<div class="bar"><i style="width:${t.pt}%"></i></div></div>`;
+  scene.appendChild(cn);
+ });
+}
+function drawLadder(N){
+ $('ladder').innerHTML=N.map((n,i)=>`<div class="lv"><div class="im"><img src="${IMG[i]}" alt=""></div><b>${esc(n)}</b><small>${i?'từ '+V.moc[i]+' điểm':'khởi đầu'}${i===N.length-1?' · thêm '+V.buocQua+' điểm = thêm 1 quả':''}</small></div>`).join('');
+}
+function drawHonor(){
+ const h=V.vinhDanh;
+ $('honor').innerHTML=`
+ <div class="hon"><div class="ic">🌱</div><div><b>Mầm Vươn cao: ${h.vuonCao?esc(h.vuonCao.ten):'chưa có'}</b><div>Tiến bộ nhiều nhất tuần trước${h.vuonCao?' ('+TEAM[h.vuonCao.to-1][0]+')':''}</div></div></div>
+ <div class="hon"><div class="ic">🌷</div><div><b>Luống Nở rộ: ${h.noRo?TEAM[h.noRo-1][0]:'chưa có'}</b><div>Tổ đầu tiên tưới đầy bình trong tháng</div></div></div>
+ <div class="hon"><div class="ic">🎉</div><div><b>Vườn Rộn ràng: ${h.soToDay}/4 tổ</b><div>Cả 4 tổ đầy bình thì cả lớp nhận thưởng chung</div></div></div>`;
+}
+function drawStore(){
+ $('goods').innerHTML=V.kho.map(g=>`<div class="good${g.sl?'':' out'}"><div class="e">${esc(g.bt)}</div><b>${esc(g.ten)}</b><div class="pr">${g.gia} quả</div><div class="st">${g.sl?'Còn '+g.sl:'Hết hàng · chờ bổ sung'}</div></div>`).join('')||'<div class="hint">Kho quà đang được chuẩn bị.</div>';
+}
+
+/* ---------- phóng to từng tổ ---------- */
+const ZB=$('zoombar');
+ZB.innerHTML=[["Cả vườn",0]].concat(TEAM.map((t,j)=>[t[0],j+1])).map(([n,t])=>`<button data-t="${t}">${t?`<i style="background:var(${TEAM[t-1][1]})"></i>`:''}${n}</button>`).join('');
+function zoom(t){
+ zoomed=t;[...ZB.children].forEach(b=>b.classList.toggle('on',+b.dataset.t===t));
+ if(!t){scene.style.transform='none';return}
+ const q=BEDS[t],xs=q.map(p=>p[0]),ys=q.map(p=>p[1]);
+ const x0=Math.min(...xs)-90,x1=Math.max(...xs)+120,y0=Math.min(...ys)-70,y1=Math.max(...ys)+30;
+ const s=Math.min(W/(x1-x0),H/(y1-y0)),cx=(x0+x1)/2,cy=(y0+y1)/2,k=$('vp').getBoundingClientRect().width/W;
+ let tx=W/2-cx*s,ty=H/2-cy*s;tx=Math.min(0,Math.max(W-W*s,tx));ty=Math.min(0,Math.max(H-H*s,ty));
+ scene.style.transform=`translate(${tx*k}px,${ty*k}px) scale(${s})`;
+}
+ZB.addEventListener('click',e=>{const b=e.target.closest('button');if(b){zoom(+b.dataset.t);Snd.play('water')}});
+addEventListener('resize',()=>zoom(zoomed));zoom(0);
+
+/* ---------- chạm vào cây ---------- */
+const tip=$('tip');
+function showTip(i){const s=S[i],k=Math.min(6,s.muc),r=nodes[i].getBoundingClientRect(),w=$('vuon').getBoundingClientRect();
+ tip.innerHTML=`<b>${esc(s.ten)}</b>${TEAM[s.to-1][0]} · ${esc(V.tenMoc[k])}${s.qua?' 🍎×'+s.qua:''}${s.ong?' · có ong 🐝':''}`;tip.hidden=false;
+ const L=Math.min(w.width-tip.offsetWidth-6,Math.max(6,r.left-w.left+r.width/2-tip.offsetWidth/2));
+ let T=r.top-w.top-tip.offsetHeight-6;if(T<4)T=r.bottom-w.top+6;tip.style.left=L+'px';tip.style.top=T+'px'}
+scene.addEventListener('pointerover',e=>{const p=e.target.closest('.plant');if(p)showTip(+p.dataset.i)});
+scene.addEventListener('pointerout',e=>{if(e.target.closest('.plant')&&hl===null)tip.hidden=true});
+scene.addEventListener('click',e=>{const p=e.target.closest('.plant');if(p){p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop');Snd.play('pop');showTip(+p.dataset.i)}});
+$('stall').addEventListener('click',()=>{Snd.play('chime');$('kho').scrollIntoView({behavior:'smooth'})});
+
+/* ---------- tìm cây ---------- */
+const norm=s=>s.normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[đĐ]/g,'d').toLowerCase();
+function focusKid(i){
+ hl=i;scene.classList.add('dimmed');nodes.forEach((n,j)=>n&&n.classList.toggle('hl',j===i));
+ const n=nodes[i],ring=$('ring');if(n){ring.style.left=n.style.left;ring.style.top=(parseFloat(n.style.top)-parseFloat(n.style.width)*W/H*.45)+'%';ring.style.width=(parseFloat(n.style.width)*1.4)+'%';ring.style.aspectRatio='1';ring.classList.add('on');}
+ if(innerWidth<760)zoom(S[i].to);
+ $('vuon').scrollIntoView({behavior:'smooth',block:'center'});Snd.play('ting');
+ setTimeout(()=>n&&showTip(i),zoomed?750:350);
+}
+function clearHl(){hl=null;scene.classList.remove('dimmed');nodes.forEach(n=>n&&n.classList.remove('hl'));const r=$('ring');if(r)r.classList.remove('on');tip.hidden=true}
+$('q').addEventListener('input',()=>{
+ const v=norm($('q').value.trim());if(!v){$('res').innerHTML='';clearHl();return}
+ const m=S.map((s,i)=>i).filter(i=>norm(S[i].ten).includes(v)).slice(0,8);
+ $('res').innerHTML=m.map(i=>{const k=Math.min(6,S[i].muc);return `<button data-i="${i}"><img src="${IMG[k]}" alt=""><div><b>${esc(S[i].ten)}</b><div class="t">${TEAM[S[i].to-1][0]} · ${esc(V.tenMoc[k])}</div></div></button>`}).join('')||'<div class="hint">Chưa thấy tên này. Em thử gõ tên riêng nhé.</div>';
+});
+$('res').addEventListener('click',e=>{const b=e.target.closest('button');if(b)focusKid(+b.dataset.i)});
+
+/* ---------- giỏ quả của em ---------- */
+$('go').addEventListener('click',openMe);$('code').addEventListener('keydown',e=>{if(e.key==='Enter')openMe()});
+function openMe(){
+ const c=$('code').value.trim(),err=$('codeErr');
+ if(!c){err.textContent='Em nhập mã trước nhé.';err.hidden=false;return}
+ err.hidden=true;$('go').disabled=true;$('go').textContent='…';
+ VuonAPI.call({action:'cuaEm',ma:c}).then(m=>{
+  const k=Math.min(6,m.muc),mx=Math.max(1,...Object.values(m.thanh));
+  const bar=(n,col)=>`<div>${n}<i><s style="width:${Math.round(m.thanh[n]/mx*100)}%;background:${col}"></s></i>${m.thanh[n]}</div>`;
+  $('me').innerHTML=`<div class="pic"><img src="${IMG[k]}" alt=""><div><b>${esc(m.ten)}</b></div><div style="font-size:13px;color:var(--soft)">${TEAM[m.to-1][0]} · ${esc(m.tenMuc)}${m.qua?' 🍎×'+m.qua:''}</div>${m.ong.length?`<div style="font-size:13px;margin-top:4px">🐝 ${m.ong.map(esc).join(', ')}</div>`:''}</div>
+  <div><div class="stat"><div><b>${m.diem}</b>điểm tháng ${V?V.thang:''}</div><div><b>${Math.max(0,m.conThieu)}</b>điểm nữa: ${esc(m.mucSau)}</div><div><b>${m.gio.daThu}</b>quả đã thu hoạch</div><div><b>${m.gio.conLai-m.gio.dangDoi}</b>quả còn trong giỏ 🧺</div></div>
+  <div class="bars">${bar('Nề nếp','#8D6E63')}${bar('Học tập','#4CAF50')}${bar('Sẻ chia','#E91E63')}</div>
+  <div class="hist">${m.lichSu.length?m.lichSu.slice(0,40).map(e=>`<div><span>${e.ngay.slice(8)}/${e.ngay.slice(5,7)} · ${esc(e.ten)}${e.cho?' <i style="color:#B07A00">(chờ cô duyệt)</i>':''}</span><span class="${e.diem<0?'m':'p'}">${e.diem>0?'+':''}${e.diem}</span></div>`).join(''):'<div>Tháng này chưa có điểm nào. Cố lên nhé!</div>'}
+  ${m.doiQua.map(o=>`<div><span>${o.ngay.slice(8)}/${o.ngay.slice(5,7)} · Đổi ${esc(o.ten)}${o.tt==='cho'?' (chờ duyệt)':o.tt==='tu_choi'?' (không duyệt)':''}</span><span class="m">−${o.qua} quả</span></div>`).join('')}</div></div>`;
+  $('me').classList.add('on');Snd.play('jingle');
+ }).catch(e=>{err.textContent=e.message;err.hidden=false;$('me').classList.remove('on')})
+ .finally(()=>{$('go').disabled=false;$('go').textContent='Xem'});
+}
+</script>
+</body>
+</html>
